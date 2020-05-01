@@ -1,8 +1,11 @@
 package joseph.banking;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 public abstract class Account implements AccountTransaction, AccountDefaultValue {
 	private int balance;
 	private int minimumBalance;
+	private ReentrantLock accountOperationLock = new ReentrantLock();
 	
 	// Constructor
 	public Account(int balance, int minimumBalance) {
@@ -12,19 +15,24 @@ public abstract class Account implements AccountTransaction, AccountDefaultValue
 	
 	// Override interface methods
 	@Override
-	public boolean increaseBalance(int amount) {
+	public synchronized boolean increaseBalance(int amount) {
+		accountOperationLock.lock();
 		setBalance(amount + getBalance());
+		accountOperationLock.unlock();
 		return true;
 	}
 
 	@Override
-	public boolean decreaseBalance(int amount) {
+	public synchronized boolean decreaseBalance(int amount) {
+		accountOperationLock.lock();
+		boolean successDecreaseBalance = false;
 		int newBalance = getBalance() - amount;
 		if (newBalance < getMinimumBalance() && newBalance >= 0) {
 			setBalance(newBalance);
-			return true;
+			successDecreaseBalance = true;
 		}
-		return false;
+		accountOperationLock.unlock();
+		return successDecreaseBalance;
 	}
 	
 	// Getter & Setter
