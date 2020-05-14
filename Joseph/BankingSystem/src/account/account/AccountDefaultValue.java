@@ -1,4 +1,4 @@
-package joseph.banking;
+package account.account;
 
 public interface AccountDefaultValue {
 	int savingInitalDeposite = 2000;

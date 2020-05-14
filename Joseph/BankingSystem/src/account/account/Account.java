@@ -1,8 +1,8 @@
-package joseph.banking;
+package account.account;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public abstract class Account implements AccountTransaction, AccountDefaultValue {
+public class Account implements AccountTransaction, AccountDefaultValue {
 	private int balance;
 	private int minimumBalance;
 	private ReentrantLock accountOperationLock = new ReentrantLock();
@@ -17,7 +17,7 @@ public abstract class Account implements AccountTransaction, AccountDefaultValue
 	@Override
 	public synchronized boolean increaseBalance(int amount) {
 		accountOperationLock.lock();
-		setBalance(amount + getBalance());
+		setBalance(amount + balance);
 		accountOperationLock.unlock();
 		return true;
 	}
@@ -26,9 +26,9 @@ public abstract class Account implements AccountTransaction, AccountDefaultValue
 	public synchronized boolean decreaseBalance(int amount) {
 		accountOperationLock.lock();
 		boolean successDecreaseBalance = false;
-		int newBalance = getBalance() - amount;
-		if (newBalance < getMinimumBalance() && newBalance >= 0) {
-			setBalance(newBalance);
+		int newBalance = balance - amount;
+		if (newBalance > minimumBalance && newBalance >= 0) {
+			balance = newBalance;
 			successDecreaseBalance = true;
 		}
 		accountOperationLock.unlock();
@@ -54,25 +54,4 @@ public abstract class Account implements AccountTransaction, AccountDefaultValue
 		return "Account [ balance=" + balance + ", minimumBalance=" + minimumBalance + " ]";
 	}
 	
-}
-
-class SavingAccount extends Account {
-	public SavingAccount(int balance) {
-		super(balance, savingMinimumBalance);
-	}
-	
-}
-
-class SalaryAccount extends Account {
-	public SalaryAccount(int balance) {
-		super(balance, salaryMinimumBalance);
-	}
-
-}
-
-class CurrentAccount extends Account {
-	public CurrentAccount(int balance) {
-		super(balance, currentMinimumBalance);
-	}
-
 }

@@ -1,4 +1,4 @@
-package joseph.banking;
+package account.customer;
 
 public class PersonalInfo {
 	private String name;
@@ -51,5 +51,25 @@ public class PersonalInfo {
 	public String toString() {
 		return "PersonalInfo [ name=" + name + ", age=" + age + ", address=" + address + ", contact=" + contact + " ]";
 	}
-	
+
+	@Override
+	public int hashCode() {
+		return 31 + name.hashCode() + age * 17 + address.hashCode() + contact.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			// Leave empty
+		} else if (obj instanceof PersonalInfo){
+			PersonalInfo comparedPersonalInfo = (PersonalInfo)obj;
+			if (name.equals(comparedPersonalInfo.getName()) &&
+				age == comparedPersonalInfo.getAge() && 
+				address.equals(comparedPersonalInfo.getAddress()) &&
+				contact.equals(comparedPersonalInfo.getContact())) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

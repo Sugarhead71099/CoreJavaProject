@@ -1,4 +1,4 @@
-package joseph.banking;
+package account.account;
 
 public interface AccountTransaction {
 	public boolean increaseBalance(int amount);
