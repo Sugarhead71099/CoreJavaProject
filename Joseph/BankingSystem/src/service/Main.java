@@ -5,13 +5,13 @@ import java.util.Scanner;
 public class Main {
 
 	public static void main(String[] args) {
-		BankingSystem system = null;
+		BankingSystem system = new BankingSystem();
 		try {
-			system = new BankingSystem();
+			system.open();
 		} catch (Exception e) {
-			System.out.println("\nDetected ERROR in System:");
+			System.err.println("\nDetected ERROR in System:");
 			e.printStackTrace();
-			System.out.println("\nAutomatically closed system");
+			System.err.println("\nAutomatically closed system");
 			System.exit(1);
 		}
 		
@@ -41,7 +41,12 @@ public class Main {
 			}
 		}
 		
-		System.out.println("You have successfully quitted the banking system!");
+		try {
+			system.close();
+			System.out.println("You have successfully quitted the banking system!");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("!!! Unable to close banking system!");
+		}
 	}
-
 }

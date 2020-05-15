@@ -1,17 +1,45 @@
 package account;
 
-import account.account.Account;
-import account.customer.CustomerInfo;
+import java.io.Serializable;
 
-public class BankAccount {
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import account.account.Account;
+import account.customer.PersonalInfo;
+import account.customer.ProfessionalInfo;
+
+@Entity
+@Table(name = "HIBERNATE_BANK_ACCOUNT")
+public class BankAccount implements Serializable {
+	private static final long serialVersionUID = 1L;
+	@Id
+	@Column(name = "ACCOUNT_NUMBER")
+	@GeneratedValue(strategy = GenerationType.TABLE)
 	private int accountNumber;
-	private CustomerInfo customerInfo;
+	@OneToOne(cascade=CascadeType.ALL)
+	private PersonalInfo personalInfo;
+	@OneToOne(cascade=CascadeType.ALL)
+	private ProfessionalInfo professionalInfo;
+	@OneToOne(cascade=CascadeType.ALL)
 	private Account account;
-		
+
 	// Constructor
-	public BankAccount(int accountNumber, CustomerInfo customerInfo, Account account) {
+	public BankAccount() {
+		
+	}
+	
+	public BankAccount(int accountNumber, PersonalInfo personalInfo, ProfessionalInfo professionalInfo,
+			Account account) {
 		this.accountNumber = accountNumber;
-		this.customerInfo = customerInfo;
+		this.personalInfo = personalInfo;
+		this.professionalInfo = professionalInfo;
 		this.account = account;
 	}
 
@@ -19,25 +47,40 @@ public class BankAccount {
 	public int getAccountNumber() {
 		return accountNumber;
 	}
-
-	public CustomerInfo getCustomerInfo() {
-		return customerInfo;
+	
+	public void setAccountNumber(int accountNumber) {
+		this.accountNumber = accountNumber;
 	}
-
 	public Account getAccount() {
 		return account;
+	}
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+	public PersonalInfo getPersonalInfo() {
+		return personalInfo;
+	}
+	public void setPersonalInfo(PersonalInfo personalInfo) {
+		this.personalInfo = personalInfo;
+	}
+	public ProfessionalInfo getProfessionalInfo() {
+		return professionalInfo;
+	}
+	public void setProfessionalInfo(ProfessionalInfo professionalInfo) {
+		this.professionalInfo = professionalInfo;
 	}
 
 	@Override
 	public String toString() {
-		return "BankAccount Number : " + accountNumber + " [\n  " + customerInfo + ", \n  " + account + "\n]";
+		return "BankAccount Number : " + accountNumber + " [\n  " + personalInfo + ", \n  " + professionalInfo + ", \n  " +account + "\n]";
 	}
 
 	@Override
 	public int hashCode() {
 		int result = 17;
 		result += 31 * accountNumber;
-		result += customerInfo.hashCode();
+		result += personalInfo.hashCode();
+		result += professionalInfo.hashCode();
 		result += account.hashCode();
 		return result;
 	}
@@ -49,7 +92,8 @@ public class BankAccount {
 		} else if (obj instanceof BankAccount) {
 			BankAccount comparedAccount = (BankAccount)obj;
 			if (accountNumber == comparedAccount.getAccountNumber() &&
-				customerInfo.equals(comparedAccount.getCustomerInfo()) &&
+				personalInfo.equals(comparedAccount.getPersonalInfo()) &&
+				professionalInfo.equals(comparedAccount.getProfessionalInfo()) &&
 				account.equals(comparedAccount.getAccount())) {
 				return true;
 			}

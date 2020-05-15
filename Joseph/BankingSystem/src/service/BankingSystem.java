@@ -5,24 +5,24 @@ import java.util.Scanner;
 import account.BankAccount;
 import account.account.Account;
 import account.account.AccountDefaultValue;
-import account.account.CurrentAccount;
-import account.account.SalaryAccount;
-import account.account.SavingAccount;
-import account.customer.CustomerInfo;
 import account.customer.PersonalInfo;
 import account.customer.ProfessionalInfo;
-import database.DataProcess;
+import database.DataProcessing;
 
 public class BankingSystem implements BankTransaction, AccountDefaultValue {
 	private int accountNumberPool = 0;
-	private DataProcess dataProcess;
+	private DataProcessing dataProcessing;
 	
-	public BankingSystem() {
-		dataProcess = new DataProcess();
-		if ((accountNumberPool = dataProcess.getMaxId()) == -1) {
+	public void open() throws Exception {
+		dataProcessing = new DataProcessing();
+		if ((accountNumberPool = dataProcessing.getMaxId()) == -1) {
 			throw new RuntimeException("Database Error: unable to get the max account number from Database!");
 		}
 		++accountNumberPool;
+	}
+	
+	public void close() throws Exception {
+		dataProcessing.close();
 	}
 
 	public void printChoices() {
@@ -93,12 +93,12 @@ public class BankingSystem implements BankTransaction, AccountDefaultValue {
 			if (initDeposit < savingInitalDeposite) {
 				throw new RuntimeException("Create Failed: customer initial deposit is less than " + savingInitalDeposite + " dollars.");
 			}
-			account = new SavingAccount(initDeposit);
+			account = new Account(initDeposit, AccountDefaultValue.savingMinimumBalance);
 		} else if (accountType.equals("salary")) {
 			if (initDeposit < salaryInitalDeposite) {
 				throw new RuntimeException("Create Failed: customer initial deposit is less than " + salaryInitalDeposite + " dollars.");
 			}
-			account = new SalaryAccount(initDeposit);
+			account = new Account(initDeposit, AccountDefaultValue.salaryMinimumBalance);
 		} else {
 			if (initDeposit < currentInitalDeposite) {
 				throw new RuntimeException("Create Failed: customer initial deposit is less than " + currentInitalDeposite + " dollars.");
@@ -106,23 +106,22 @@ public class BankingSystem implements BankTransaction, AccountDefaultValue {
 			if (profIncome < currentMinimumIncome) {
 				throw new RuntimeException("Create Failed: customer income is less than " + currentMinimumIncome + " dollars.");
 			}
-			account = new CurrentAccount(initDeposit);
+			account = new Account(initDeposit, AccountDefaultValue.currentMinimumBalance);
 		}
 		
 		PersonalInfo personalInfo = new PersonalInfo(custName, custAge, custAddress, custContact);
 		ProfessionalInfo professionalInfo = new ProfessionalInfo(profProfession, profIncome);
-		CustomerInfo customerInfo = new CustomerInfo(personalInfo, professionalInfo);
-		BankAccount bankAccount = new BankAccount(accountNumberPool, customerInfo, account);
-		System.out.println("Create Succeed: customer " + custName + " bank account number : " + accountNumberPool);
-		if (dataProcess.insertData(bankAccount)) {
+		BankAccount bankAccount = new BankAccount(accountNumberPool, personalInfo, professionalInfo, account);
+		if (dataProcessing.insertData(bankAccount)) {
 			++accountNumberPool;
 		} else {
 			throw new RuntimeException("Create Failed: unable to insert into Database!");
 		}
+		System.out.println("Create Succeed: customer " + custName + " bank account number : " + accountNumberPool);
 	}
 
 	public BankAccount getBankAccount(int accountNumber) {
-		return dataProcess.getData(accountNumber);
+		return dataProcessing.getData(accountNumber);
 	}
 	
 	public void actionToTransfer(Scanner scanner, BankingSystem system)
@@ -155,7 +154,7 @@ public class BankingSystem implements BankTransaction, AccountDefaultValue {
 		
 		if (payerBankAccount.getAccount().decreaseBalance(amount)) {
 			if (payeeBankAccount.getAccount().increaseBalance(amount)) {
-				if (dataProcess.updateData(payerBankAccount) && dataProcess.updateData(payeeBankAccount)) {
+				if (dataProcessing.updateData(payerBankAccount) && dataProcessing.updateData(payeeBankAccount)) {
 					System.out.println("Transfer Succeeded: transfer " + amount + " dollars from account : " + payFromAccountNumber + " to account : " + payToAccountNumber);
 				} else {
 					throw new RuntimeException("Transfer Failed: unable to update Database!");
@@ -188,7 +187,7 @@ public class BankingSystem implements BankTransaction, AccountDefaultValue {
 			throw new RuntimeException("Withdraw Failed: Cannot find this account : " + accountNumber);
 		}
 		if (bankAccount.getAccount().decreaseBalance(amount)) {
-			if (dataProcess.updateData(bankAccount)) {
+			if (dataProcessing.updateData(bankAccount)) {
 				System.out.println("Withdraw Succeeded: withdraw " + amount + " dollars from account : " + accountNumber + ", current balance = " + bankAccount.getAccount().getBalance());
 			} else {
 				throw new RuntimeException("Withdraw Failed: unable to update Database!");
@@ -217,7 +216,7 @@ public class BankingSystem implements BankTransaction, AccountDefaultValue {
 			throw new RuntimeException("Deposit Failed: Cannot find this account : " + accountNumber);
 		}
 		if (bankAccount.getAccount().increaseBalance(amount)) {
-			if (dataProcess.updateData(bankAccount)) {
+			if (dataProcessing.updateData(bankAccount)) {
 				System.out.println("Deposit Succeeded: deposit " + amount + " dollars into account : " + accountNumber);
 			} else {
 				throw new RuntimeException("Deposit Failed: unable to update Database!");
@@ -263,7 +262,7 @@ public class BankingSystem implements BankTransaction, AccountDefaultValue {
 		if (bankAccount == null) {
 			throw new RuntimeException("Cannot find this account");
 		} else {
-			if (dataProcess.deleteData(bankAccount)) {
+			if (dataProcessing.deleteData(bankAccount)) {
 				System.out.println("Delete successfully! Account number = " + bankAccount.getAccountNumber());
 			} else {
 				throw new RuntimeException("Delete Failed: unable to delete from Database!");
