@@ -6,7 +6,11 @@
 	<classpathentry kind="lib" path="F:/Apolis/Hibernate/antlr-2.7.7.jar"/>
 	<classpathentry kind="lib" path="F:/Apolis/Hibernate/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="F:/Apolis/Hibernate/hibernate-commons-annotations-4.0.5.Final.jar"/>
-	<classpathentry kind="lib" path="F:/Apolis/Hibernate/hibernate-core-4.3.6.Final.jar" sourcepath="F:/Apolis/Hibernate/hibernate-release-4.3.6.Final.zip"/>
+	<classpathentry kind="lib" path="F:/Apolis/Hibernate/hibernate-core-4.3.6.Final.jar" sourcepath="F:/Apolis/Hibernate/hibernate-core-4.3.6.Final-sources.jar">
+		<attributes>
+			<attribute name="source_encoding" value="UTF-8"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="F:/Apolis/Hibernate/hibernate-jpa-2.1-api-1.0.0.Final.jar" sourcepath="F:/Apolis/Hibernate/hibernate-jpa-2.1-api-1.0.0.Final.jar"/>
 	<classpathentry kind="lib" path="F:/Apolis/Hibernate/jandex-1.1.0.Final.jar"/>
 	<classpathentry kind="lib" path="F:/Apolis/Hibernate/javassist-3.18.1-GA.jar"/>

@@ -3,20 +3,12 @@ package account.customer;
 import java.io.Serializable;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.Embeddable;
 
-@Entity
-@Table(name = "HIBERNATE_PROFESSIONAL_INFO")
+@Embeddable
 public class ProfessionalInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "PRO_INFO_ID")
-	private int id;
+
 	@Column(name = "PROFESSION")
 	String profession;
 	@Column(name = "INCOME")
@@ -44,12 +36,6 @@ public class ProfessionalInfo implements Serializable {
 	}
 	public void setIncome(int income) {
 		this.income = income;
-	}
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	@Override

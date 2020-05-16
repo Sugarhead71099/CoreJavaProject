@@ -7,7 +7,7 @@ public interface Database {
 	public static final String JDBC = "jdbc";
 	
 	public abstract BankAccount getData(int accountNumber);
-	public abstract boolean insertData(BankAccount bankAccount);
+	public abstract int insertData(BankAccount bankAccount);
 	public abstract boolean updateData(BankAccount bankAccount);
 	public abstract boolean deleteData(BankAccount bankAccount);
 	public abstract int getMaxId();

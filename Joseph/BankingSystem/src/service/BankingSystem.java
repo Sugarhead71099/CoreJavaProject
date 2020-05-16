@@ -112,12 +112,14 @@ public class BankingSystem implements BankTransaction, AccountDefaultValue {
 		PersonalInfo personalInfo = new PersonalInfo(custName, custAge, custAddress, custContact);
 		ProfessionalInfo professionalInfo = new ProfessionalInfo(profProfession, profIncome);
 		BankAccount bankAccount = new BankAccount(accountNumberPool, personalInfo, professionalInfo, account);
-		if (dataProcessing.insertData(bankAccount)) {
-			++accountNumberPool;
+		
+		int identifier = dataProcessing.insertData(bankAccount);
+		if (identifier != -1) {
+			accountNumberPool = identifier + 1;
 		} else {
 			throw new RuntimeException("Create Failed: unable to insert into Database!");
 		}
-		System.out.println("Create Succeed: customer " + custName + " bank account number : " + accountNumberPool);
+		System.out.println("Create Succeed - Customer " + custName + " bank account number : " + identifier);
 	}
 
 	public BankAccount getBankAccount(int accountNumber) {

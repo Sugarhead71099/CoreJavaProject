@@ -20,18 +20,18 @@ public class Hibernate_Database implements Database {
 	}
 
 	@Override
-	public boolean insertData(BankAccount bankAccount) {
+	public int insertData(BankAccount bankAccount) {
+		Integer identifier = null;
 		try {
 			Session session = sessionFactory.openSession();
 			session.beginTransaction();
-			session.save(bankAccount);
+			identifier = (Integer)session.save(bankAccount);
 			session.getTransaction().commit();
 			session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
 		}
-		return true;
+		return (identifier == null) ? -1 : identifier.intValue();
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class Hibernate_Database implements Database {
 	}
 
 	@Override
-	@Deprecated
+	//@Deprecated
 	public int getMaxId() {
 		return 0;
 	}

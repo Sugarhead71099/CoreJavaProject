@@ -95,14 +95,14 @@ public class JDBC_Database implements Database {
 			}
 
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			return false;
 		}
 		return true;
 	}
 	
 	@Override
-	public boolean insertData(BankAccount obj) {
+	public int insertData(BankAccount obj) {
 		try {
 			int accountNumber = obj.getAccountNumber();
 			PersonalInfo personalInfo = obj.getPersonalInfo();
@@ -111,7 +111,7 @@ public class JDBC_Database implements Database {
 			PreparedStatement pstmt_insert = connection.prepareStatement("INSERT INTO BankAccount VALUES(?)");
 			pstmt_insert.setInt(1, accountNumber);
 			if (pstmt_insert.executeUpdate() != 1) {
-				return false;
+				return -1;
 			}
 			
 			pstmt_insert = connection.prepareStatement("INSERT INTO PersonalInfo VALUES(?,?,?,?,?)");
@@ -121,7 +121,7 @@ public class JDBC_Database implements Database {
 			pstmt_insert.setString(4, personalInfo.getAddress());
 			pstmt_insert.setString(5, personalInfo.getContact());
 			if (pstmt_insert.executeUpdate() != 1) {
-				return false;
+				return -1;
 			}
 			
 			pstmt_insert = connection.prepareStatement("INSERT INTO ProfessionalInfo VALUES(?,?,?)");
@@ -129,7 +129,7 @@ public class JDBC_Database implements Database {
 			pstmt_insert.setString(2, professionalInfo.getProfession());
 			pstmt_insert.setInt(3, professionalInfo.getIncome());
 			if (pstmt_insert.executeUpdate() != 1) {
-				return false;
+				return -1;
 			}
 			
 			pstmt_insert = connection.prepareStatement("INSERT INTO Account VALUES(?,?,?)");
@@ -137,14 +137,14 @@ public class JDBC_Database implements Database {
 			pstmt_insert.setInt(2, account.getBalance());
 			pstmt_insert.setInt(3, account.getMinimumBalance());
 			if (pstmt_insert.executeUpdate() != 1) {
-				return false;
+				return -1;
 			}
 		
 		} catch (SQLException e) {
-			//e.printStackTrace();
-			return false;
+			e.printStackTrace();
+			return -1;
 		}
-		return true;
+		return obj.getAccountNumber();
 	}
 	
 	@Override
@@ -176,7 +176,7 @@ public class JDBC_Database implements Database {
 			}
 			
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			return false;
 		}
 		return true;
@@ -192,7 +192,7 @@ public class JDBC_Database implements Database {
 				return rs.getInt(1);
 			}
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 		return -1;
 	}

@@ -3,20 +3,12 @@ package account.account;
 import java.io.Serializable;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.Embeddable;
 
-@Entity
-@Table(name = "HIBERNATE_Account")
+@Embeddable
 public class Account implements AccountTransaction, AccountDefaultValue, Serializable {
 	private static final long serialVersionUID = 1L;
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ACC_ID")
-	private int id;
+
 	@Column(name = "BALANCE")
 	private int balance;
 	@Column(name = "MINIMUM_BALANCE")
@@ -53,12 +45,6 @@ public class Account implements AccountTransaction, AccountDefaultValue, Seriali
 	// Getter & Setter
 	public int getBalance() {
 		return balance;
-	}
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
 	}
 	public int getMinimumBalance() {
 		return minimumBalance;

@@ -2,13 +2,12 @@ package account;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import account.account.Account;
@@ -21,13 +20,13 @@ public class BankAccount implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@Column(name = "ACCOUNT_NUMBER")
-	@GeneratedValue(strategy = GenerationType.TABLE)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int accountNumber;
-	@OneToOne(cascade=CascadeType.ALL)
+	@Embedded
 	private PersonalInfo personalInfo;
-	@OneToOne(cascade=CascadeType.ALL)
+	@Embedded
 	private ProfessionalInfo professionalInfo;
-	@OneToOne(cascade=CascadeType.ALL)
+	@Embedded
 	private Account account;
 
 	// Constructor

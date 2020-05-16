@@ -40,13 +40,12 @@ public class DataProcessing {
 		return data;
 	}
 	
-	public boolean insertData(BankAccount obj) {
-		if (database.insertData(obj)) {
+	public int insertData(BankAccount obj) {
+		int identifier = database.insertData(obj);
+		if (identifier != -1) {
 			cache.put(obj.getAccountNumber(), obj);
-			return true;
-		} else {
-			return false;
 		}
+		return identifier;
 	}
 	
 	public boolean updateData(BankAccount obj) {
