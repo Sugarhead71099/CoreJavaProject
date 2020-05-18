@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+        <property name="hibernate.connection.username">system</property>
+        <property name="hibernate.connection.password">system</property>
+        <property name="hibernate.connection.url">jdbc:oracle:thin:@localhost:1521:orcl</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
+        
+        <property name="format_sql">true</property>  <!-- this is required for formating queries in the logs(console) -->
+        <property name="show_sql">true</property>   <!-- this is required for display queries in the logs(console) -->
+        <property name="hbm2ddl.auto">update</property> <!-- this is using for creating tables once server get start -->
+        
+        <mapping class="account.BankAccount"/>
+        <mapping class="account.account.Account"/>
+        <mapping class="account.customer.PersonalInfo"/>
+        <mapping class="account.customer.ProfessionalInfo"/>
+    </session-factory>
+</hibernate-configuration>
